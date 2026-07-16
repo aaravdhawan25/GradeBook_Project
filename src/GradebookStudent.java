@@ -51,10 +51,26 @@ public class GradebookStudent {
         return new ArrayList<>(grades);
     }
 
+    public double averageGrade(){
+        if(grades.isEmpty()) {
+            return 0.0;
+        }
+     double total = 0;
+
+     for(GradeItem grade : grades) {
+         total += grade.getScore();
+        }
+
+        return total / grades.size();
+     }
+   
+    }
+   
+   
     // public ArrayList<GradeItem> findByID(int id){
     //     ArrayList<GradeItem> byId = new ArrayList<>();
     //     if (id == getID()) {
              
     //     }
     // }
-}
+
