@@ -67,10 +67,4 @@ public class GradebookStudent {
     }
    
    
-    // public ArrayList<GradeItem> findByID(int id){
-    //     ArrayList<GradeItem> byId = new ArrayList<>();
-    //     if (id == getID()) {
-             
-    //     }
-    // }
 
