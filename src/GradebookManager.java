@@ -52,9 +52,10 @@ public class GradebookManager {
     public ArrayList<GradebookStudent> getStudents() {
     return new ArrayList<>(students);
     }
-   public void loadFromFile(String filename) throws FileNotFoundException {
+   public int loadFromFile(String filename) throws FileNotFoundException {
         File file = new File(filename);
         Scanner scanner = new Scanner(file);
+        int studentsLoadedIn = 0;
 
         while (scanner.hasNextLine()) {
            String line = scanner.nextLine().trim();
@@ -70,7 +71,7 @@ public class GradebookManager {
          String name = parts[2].trim();
     
          addStudent(new GradebookStudent(id, name));
-     
+            studentsLoadedIn++;
       } else if (parts[0].equals("GRADE")) {              
          int id = Integer.parseInt(parts[1].trim());
        String title = parts[2].trim();
@@ -85,6 +86,7 @@ public class GradebookManager {
         }
 
         scanner.close();
+        return studentsLoadedIn;
     }
 
     public void saveToFile(String filename) throws IOException {
@@ -100,5 +102,47 @@ public class GradebookManager {
 
         writer.close();
     } 
-   }
+    public ArrayList<GradebookStudent> searchByName(String search) {
+        ArrayList<GradebookStudent> matches = new ArrayList<>();
+        if(search == null) {
+            return matches;
+        }
+        String lowerSearch = search.toLowerCase();
+   for(GradebookStudent student : students) {
+            if(student.getName().toLowerCase().contains(lowerSearch)) {
+           matches.add(student);
+            }
+        }
+        return matches;
+    }
+
+    public void sortByName() {
+        for (int i = 0; i < students.size() - 1; i++) {
+            int lowest = i;
+        for(int j = i + 1; j < students.size(); j++) {
+          if(students.get(j).getName().compareToIgnoreCase(students.get(lowest).getName()) < 0) {
+               lowest = j;
+          }
+         }
+              GradebookStudent temp = students.get(i);
+          students.set(i, students.get(lowest));
+         students.set(lowest, temp);
+        }
+    }
+
+    public void sortByAverage() {
+        for (int i = 0; i < students.size() - 1; i++) {
+        int highest = i;
+       for (int j = i + 1; j < students.size(); j++) {
+         if (students.get(j).averageGrade() > students.get(highest).averageGrade()) {
+           highest = j;
+                }
+            }
+  GradebookStudent temp = students.get(i);
+  students.set(i, students.get(highest));
+     students.set(highest, temp);
+            }
+        }
+    }
+   
 
