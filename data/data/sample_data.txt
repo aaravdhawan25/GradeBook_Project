@@ -1,0 +1,5 @@
+STUDENT,1,Omkar Raj
+GRADE,98,Homework 1,88.0
+GRADE,101,Quiz 1,92.0
+STUDENT,2,Aidan Fan
+GRADE,99,Homework 1,75.0

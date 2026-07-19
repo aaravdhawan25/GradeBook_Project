@@ -64,7 +64,26 @@ public class GradebookStudent {
         return total / grades.size();
      }
    
+     public boolean removeGrade(int index) {
+        if(index < 0 || index >= grades.size()){
+        return false;
+        }else grades.remove(index) ;
+        return true;
+     }
+     public boolean editGrade(int index, String newTitle, double newScore) {
+        if(index < 0 || index >= grades.size()){
+            return false;
+        }
+     
+     GradeItem grade = grades.get(index);
+     grade.setTitle(newTitle);
+     grade.setScore(newScore);
+     return true;
     }
    
+    }
+
+
+
    
 
