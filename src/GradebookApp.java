@@ -229,7 +229,7 @@ public class GradebookApp {
 
             } else if (choice == 7) {
 
-                // save data to file 
+                // ---- save data to file ----
                 if (manager.getStudents().isEmpty()) {
                     System.out.println();
                     System.out.println("No gradebook data to save yet. Add a student or load data from a file before saving.");
