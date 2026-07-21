@@ -276,9 +276,13 @@ public class GradebookApp {
         System.out.println();
 
         try {
+
+            //saveToFile writes out the entire current roster every time, not just newly added elements
+            //it means that save then load always gives back the exact same data
             manager.saveToFile(filename);
             System.out.println("Gradebook saved successfully.");
         } catch (IOException e) {
+            //this could occur if the folder in the path doesnt exist
             System.out.println("Could not save file: " + filename);
         }
     }

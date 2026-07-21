@@ -61,5 +61,5 @@ the lines are split on commas. A student line creates a new student, a grade lin
 lines that cannot be parsed print a warning and are skipped. Save must write this same format so a save load round trip can create the same memory
 
 Work Division:
-I did gradebook item and gradebook app 
+Adi did gradebook item and gradebook app 
 Aarav did gradebook student and gradebook manager
