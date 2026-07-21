@@ -1,0 +1,69 @@
+Partner Names: Adi and Aarav
+
+The project is about a gradebook that can record student data, change it, and load and save it into a file for future opening. It can be used with a menu where you type in a int from 1-8 and it guides you with different options.
+
+GradebookStudent: Represents one student and their grades
+GradeItem: represents a single graded assignment with the title and score
+GradebookManager: Has the full roster of students nad handles adding, searching, saving, and loading across all students
+GradebookApp: runs the menu loop and connects user input to the manager
+
+Private Fields: 
+
+GradebookStudent had int id, String name, and ArrayList<GradeItem>grades
+
+GradeItem has String title, double score
+
+GradebookManager: ArrayList<GradebookStudent> students 
+
+GradebookApp: has none
+
+GradebookStudent methods
+GradebookStudent(int id, String name) constructs a student and validates it
+get(id) / getName() returns a students id/name
+
+addGrade(String title, double score) creates and appends a gradeItem
+
+getGrades() returns a copy of the grade list
+
+averageGrade() reutrns the mean of all grade scores or 0.0 if empty
+
+GradeItem methods:
+
+GradeItem(int id, String name) constructs a student, validating id>0 and non blank name
+getTitle() / getScore() returns the title and score
+
+GradebookManager methods:
+
+addStudent(GradebookStudet s) adds a student, rejecting duplicate ids
+
+addGradeToStudent(int id, String title, double score) finds the student and appends a grade
+
+findById(int id) - linear search ,returns the student or null
+
+getAllStudents() returns a copy of the roster
+
+loadFromFile(String path) - reads sample_data.txt and rebuilds the roster
+
+saveToFile(String path) - starts the program and runs the menu loop
+
+GradebookApp:
+
+main(String[] args) - starts the program and runs the menu loop
+
+File Format: 
+
+
+STUDENT,101,Alice Chen
+GRADE,101,Homework 1,88.0
+GRADE,101,Quiz 1,92.0
+STUDENT,102,Bob Kim
+GRADE,102,Homework 1,75.0
+
+the lines are split on commas. A student line creates a new student, a grade line finds the matching id and appends a grade to it. Empty lines are skipped, 
+lines that cannot be parsed print a warning and are skipped. Save must write this same format so a save load round trip can create the same memory
+
+Work Division:
+I did gradebook item and gradebook app 
+Aarav did gradebook student and gradebook manager
+We both did the bonuses together
+
