@@ -11,28 +11,28 @@ public class GradebookManager {
 
    private ArrayList<GradebookStudent> students;
 
-  public GradebookManager() {
-  students = new ArrayList<>();
-    }
+   public GradebookManager(){
+    students = new ArrayList<>();
+   }
 
     public boolean addStudent(GradebookStudent student) {
-    if (student == null) {
-       return false;
-    }
-
-       if (findById(student.getID()) != null) {
-       return false;
+        if (student == null) {
+            return false;
         }
 
-    students.add(student);
-         return true;
-          }
+        if (findById(student.getID()) != null) {
+            return false;
+        }
+
+        students.add(student);
+        return true;
+    }
 
     public GradebookStudent findById(int id) {
         for (GradebookStudent student : students) {
-                  if (student.getID() == id) {
-      return student;
-       }
+            if (student.getID() == id) {
+                return student;
+            }
         }
 
         return null;
@@ -41,46 +41,48 @@ public class GradebookManager {
     public boolean addGradeToStudent(int id, String title, double score) {
      GradebookStudent student = findById(id);
 
-  if (student == null) {
-  return false;
-   }
+        if (student == null) {
+            return false;
+        }
 
-   student.addGrade(new GradeItem(title, score));
-   return true;
+        student.addGrade(new GradeItem(title, score));
+        return true;
     }
 
     public ArrayList<GradebookStudent> getStudents() {
-    return new ArrayList<>(students);
+        return new ArrayList<>(students);
     }
+
    public int loadFromFile(String filename) throws FileNotFoundException {
         File file = new File(filename);
         Scanner scanner = new Scanner(file);
         int studentsLoadedIn = 0;
 
         while (scanner.hasNextLine()) {
-           String line = scanner.nextLine().trim();
-      if (line.isEmpty()) {
-       continue; // skip blank lines, nothing to do with those
-         }
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) {
+                continue; // skip blank lines, nothing to do with those
+            }
 
- String[] parts = line.split(",");
+        String[] parts = line.split(",");
 
         try {
-         if (parts[0].equals("STUDENT")) {
-        int id = Integer.parseInt(parts[1].trim());
-         String name = parts[2].trim();
+            if (parts[0].equals("STUDENT")) {
+            int id = Integer.parseInt(parts[1].trim());
+            String name = parts[2].trim();
     
-         addStudent(new GradebookStudent(id, name));
+            addStudent(new GradebookStudent(id, name));
             studentsLoadedIn++;
-      } else if (parts[0].equals("GRADE")) {              
-         int id = Integer.parseInt(parts[1].trim());
-       String title = parts[2].trim();
-        double score = Double.parseDouble(parts[3].trim());
-        addGradeToStudent(id, title, score);
-         } else {
-            System.out.println("skipping line, don't recognize it: " + line);
+
+            } else if (parts[0].equals("GRADE")) {              
+                int id = Integer.parseInt(parts[1].trim());
+                String title = parts[2].trim();
+                double score = Double.parseDouble(parts[3].trim());
+                addGradeToStudent(id, title, score);
+            } else {
+                System.out.println("skipping line, don't recognize it: " + line);
             }
-            } catch (Exception e) {
+        } catch (Exception e) {
                 System.out.println("couldn't parse this line, skipping: " + line);
             }
         }
