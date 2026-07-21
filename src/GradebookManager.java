@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class GradebookManager {
 
-   private ArrayList<GradebookStudent> students;
+   private ArrayList<GradebookStudent> students; // this is where every student lives
 
    public GradebookManager(){
     students = new ArrayList<>();
@@ -17,11 +17,11 @@ public class GradebookManager {
 
     public boolean addStudent(GradebookStudent student) {
         if (student == null) {
-            return false;
+            return false; // cant add nothing lol
         }
 
         if (findById(student.getID()) != null) {
-            return false;
+            return false; // id already taken, no dupes allowed
         }
 
         students.add(student);
@@ -29,13 +29,14 @@ public class GradebookManager {
     }
 
     public GradebookStudent findById(int id) {
+        // just loops through everyone until it finds the matching id
         for (GradebookStudent student : students) {
             if (student.getID() == id) {
                 return student;
             }
         }
 
-        return null;
+        return null; // didnt find em
     }
 
     public boolean addGradeToStudent(int id, String title, double score) {
@@ -50,7 +51,7 @@ public class GradebookManager {
     }
 
     public ArrayList<GradebookStudent> getStudents() {
-        return new ArrayList<>(students);
+        return new ArrayList<>(students); // giving back a copy so nobody messes with the real list
     }
 
    public int loadFromFile(String filename) throws FileNotFoundException {
@@ -64,10 +65,11 @@ public class GradebookManager {
                 continue; // skip blank lines, nothing to do with those
             }
 
-        String[] parts = line.split(",");
+        String[] parts = line.split(","); // the file is comma separated so this splits it up
 
         try {
             if (parts[0].equals("STUDENT")) {
+            // first word tells us if this line is a student or a grade
             int id = Integer.parseInt(parts[1].trim());
             String name = parts[2].trim();
     
@@ -83,6 +85,7 @@ public class GradebookManager {
                 System.out.println("skipping line, don't recognize it: " + line);
             }
         } catch (Exception e) {
+                // line was probably formatted wrong, just skip it instead of crashing everything
                 System.out.println("couldn't parse this line, skipping: " + line);
             }
         }
@@ -94,6 +97,7 @@ public class GradebookManager {
     public void saveToFile(String filename) throws IOException {
         PrintWriter writer = new PrintWriter(new FileWriter(filename));
 
+        // writes every student out, then all their grades right under them
         for (GradebookStudent student : students) {
             writer.println("STUDENT," + student.getID() + "," + student.getName());
 
@@ -109,7 +113,7 @@ public class GradebookManager {
         if(search == null) {
             return matches;
         }
-        String lowerSearch = search.toLowerCase();
+        String lowerSearch = search.toLowerCase(); // lowercase so it doesnt matter how they type it
    for(GradebookStudent student : students) {
             if(student.getName().toLowerCase().contains(lowerSearch)) {
            matches.add(student);
@@ -119,6 +123,7 @@ public class GradebookManager {
     }
 
     public void sortByName() {
+        // this is just selection sort, finds the smallest name each round and swaps it to the front
         for (int i = 0; i < students.size() - 1; i++) {
             int lowest = i;
         for(int j = i + 1; j < students.size(); j++) {
@@ -133,6 +138,7 @@ public class GradebookManager {
     }
 
     public void sortByAverage() {
+        // same idea as sortByName but finds the highest average instead
         for (int i = 0; i < students.size() - 1; i++) {
         int highest = i;
        for (int j = i + 1; j < students.size(); j++) {
@@ -146,5 +152,3 @@ public class GradebookManager {
             }
         }
     }
-   
-

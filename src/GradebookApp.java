@@ -5,24 +5,26 @@ import java.util.Scanner;
 public class GradebookApp {
 
     public static void main(String[] args) {
-        GradebookManager manager = new GradebookManager();
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
+        GradebookManager manager = new GradebookManager(); // this is basically the brain that holds all the students
+        Scanner scanner = new Scanner(System.in); // so we can actually read what the user types
+        boolean running = true; // keeps the loop going until they wanna quit
 
         while (running) {
             printMenu();
             System.out.print("Enter choice: ");
 
             if (!scanner.hasNextInt()) {
+                // they typed something random like letters instead of a number
                 System.out.println();
                 System.out.println("Invalid input. Please enter a number from 1 to 8.");
-                scanner.next();
+                scanner.next(); // gotta clear it out or it loops forever lol
                 continue;
             }
 
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // eats the leftover enter key so next input doesnt get messed up
 
+            // just checking which option they picked and calling the right method
             if (choice == 1) {
                 addStudent(manager, scanner);
             } else if (choice == 2) {
@@ -38,7 +40,7 @@ public class GradebookApp {
             } else if (choice == 7) {
                 saveData(manager, scanner);
             } else if (choice == 8) {
-                running = false;
+                running = false; // this stops the while loop
                 System.out.println();
                 System.out.println("Goodbye.");
             } else {
@@ -47,10 +49,11 @@ public class GradebookApp {
             }
         }
 
-        scanner.close();
+        scanner.close(); // close it when were done, good habit i guess
     }
 
     public static void printMenu() {
+        // just prints out the options, nothing fancy here
         System.out.println("==== Gradebook Manager ====");
         System.out.println("1. Add Student");
         System.out.println("2. Add Grade to Student");
@@ -79,6 +82,7 @@ public class GradebookApp {
         System.out.println();
 
         if (manager.findById(id) != null) {
+            // dont let them add the same id twice, that would be weird
             System.out.println("A student with id " + id + " already exists. Student was not added.");
             return;
         }
@@ -87,6 +91,7 @@ public class GradebookApp {
             manager.addStudent(new GradebookStudent(id, name));
             System.out.println("Student added successfully.");
         } catch (IllegalArgumentException e) {
+            // the student class throws this if stuff is invalid so we gotta figure out which one
             if (id <= 0) {
                 System.out.println("Invalid student id. Student id must be greater than 0.");
             } else {
@@ -97,6 +102,7 @@ public class GradebookApp {
 
     public static void addGradeToStudent(GradebookManager manager, Scanner scanner) {
         if (manager.getStudents().isEmpty()) {
+            // cant add a grade if theres literally no students yet
             System.out.println();
             System.out.println("No students in the gradebook yet. Add a student or load data from a file first.");
             return;
@@ -153,7 +159,7 @@ public class GradebookApp {
         System.out.println("All Students:");
 
         for (GradebookStudent student : manager.getStudents()) {
-            double avg = Math.round(student.averageGrade() * 100.0) / 100.0;
+            double avg = Math.round(student.averageGrade() * 100.0) / 100.0; // rounds it to 2 decimals
 
             if (student.getGrades().isEmpty()) {
                 System.out.println(student.getID() + " - " + student.getName()
@@ -190,6 +196,7 @@ public class GradebookApp {
             return;
         }
 
+        // print out everything about this one student
         System.out.println("Student Details:");
         System.out.println("ID: " + student.getID());
         System.out.println("Name: " + student.getName());
@@ -250,6 +257,7 @@ public class GradebookApp {
             System.out.println("Data loaded successfully.");
             System.out.println("Students loaded: " + studentsLoaded);
         } catch (FileNotFoundException e) {
+            // file path was probably wrong or doesnt exist
             System.out.println("Could not find file: " + filename);
             System.out.println("Gradebook was not changed.");
         }
