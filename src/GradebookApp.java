@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+import Utils.MyPrint;
 
 public class GradebookApp {
 
@@ -15,8 +16,8 @@ public class GradebookApp {
 
             if (!scanner.hasNextInt()) {
                 // they typed something random like letters instead of a number
-                System.out.println();
-                System.out.println("Invalid input. Please enter a number from 1 to 8.");
+                MyPrint.print();
+                MyPrint.print("Invalid input. Please enter a number from 1 to 8.");
                 scanner.next(); // gotta clear it out or it loops forever lol
                 continue;
             }
@@ -41,11 +42,11 @@ public class GradebookApp {
                 saveData(manager, scanner);
             } else if (choice == 8) {
                 running = false; // this stops the while loop
-                System.out.println();
-                System.out.println("Goodbye.");
+                MyPrint.print();
+                MyPrint.print("Goodbye.");
             } else {
-                System.out.println();
-                System.out.println("Invalid menu choice. Please enter a number from 1 to 8.");
+                MyPrint.print();
+                MyPrint.print("Invalid menu choice. Please enter a number from 1 to 8.");
             }
         }
 
@@ -54,22 +55,22 @@ public class GradebookApp {
 
     public static void printMenu() {
         // just prints out the options, nothing fancy here
-        System.out.println("==== Gradebook Manager ====");
-        System.out.println("1. Add Student");
-        System.out.println("2. Add Grade to Student");
-        System.out.println("3. View All Students");
-        System.out.println("4. View Student Details");
-        System.out.println("5. Search Student by ID");
-        System.out.println("6. Load Data from File");
-        System.out.println("7. Save Data to File");
-        System.out.println("8. Exit");
+        MyPrint.print("==== Gradebook Manager ====");
+        MyPrint.print("1. Add Student");
+        MyPrint.print("2. Add Grade to Student");
+        MyPrint.print("3. View All Students");
+        MyPrint.print("4. View Student Details");
+        MyPrint.print("5. Search Student by ID");
+        MyPrint.print("6. Load Data from File");
+        MyPrint.print("7. Save Data to File");
+        MyPrint.print("8. Exit");
     }
 
     public static void addStudent(GradebookManager manager, Scanner scanner) {
         System.out.print("Enter student id: ");
         if (!scanner.hasNextInt()) {
-            System.out.println();
-            System.out.println("Invalid student id. Student id must be greater than 0.");
+            MyPrint.print();
+            MyPrint.print("Invalid student id. Student id must be greater than 0.");
             scanner.next();
             return;
         }
@@ -79,23 +80,23 @@ public class GradebookApp {
         System.out.print("Enter student name: ");
         String name = scanner.nextLine();
 
-        System.out.println();
+        MyPrint.print();
 
         if (manager.findById(id) != null) {
             // dont let them add the same id twice, that would be weird
-            System.out.println("A student with id " + id + " already exists. Student was not added.");
+            MyPrint.print("A student with id " + id + " already exists. Student was not added.");
             return;
         }
 
         try {
             manager.addStudent(new GradebookStudent(id, name));
-            System.out.println("Student added successfully.");
+            MyPrint.print("Student added successfully.");
         } catch (IllegalArgumentException e) {
             // the student class throws this if stuff is invalid so we gotta figure out which one
             if (id <= 0) {
-                System.out.println("Invalid student id. Student id must be greater than 0.");
+                MyPrint.print("Invalid student id. Student id must be greater than 0.");
             } else {
-                System.out.println("Invalid student name. Student name cannot be empty.");
+                MyPrint.print("Invalid student name. Student name cannot be empty.");
             }
         }
     }
@@ -103,15 +104,15 @@ public class GradebookApp {
     public static void addGradeToStudent(GradebookManager manager, Scanner scanner) {
         if (manager.getStudents().isEmpty()) {
             // cant add a grade if theres literally no students yet
-            System.out.println();
-            System.out.println("No students in the gradebook yet. Add a student or load data from a file first.");
+            MyPrint.print();
+            MyPrint.print("No students in the gradebook yet. Add a student or load data from a file first.");
             return;
         }
 
         System.out.print("Enter student id: ");
         if (!scanner.hasNextInt()) {
-            System.out.println();
-            System.out.println("Invalid student id.");
+            MyPrint.print();
+            MyPrint.print("Invalid student id.");
             scanner.next();
             return;
         }
@@ -120,8 +121,8 @@ public class GradebookApp {
 
         GradebookStudent student = manager.findById(id);
         if (student == null) {
-            System.out.println();
-            System.out.println("No student found with id " + id + ". Grade was not added.");
+            MyPrint.print();
+            MyPrint.print("No student found with id " + id + ". Grade was not added.");
             return;
         }
 
@@ -130,42 +131,42 @@ public class GradebookApp {
 
         System.out.print("Enter score: ");
         if (!scanner.hasNextDouble()) {
-            System.out.println();
-            System.out.println("Invalid score. Score must be between 0.0 and 100.0.");
+            MyPrint.print();
+            MyPrint.print("Invalid score. Score must be between 0.0 and 100.0.");
             scanner.next();
             return;
         }
         double score = scanner.nextDouble();
         scanner.nextLine();
 
-        System.out.println();
+        MyPrint.print();
 
         try {
             manager.addGradeToStudent(id, title, score);
-            System.out.println("Grade added successfully.");
+            MyPrint.print("Grade added successfully.");
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid score. Score must be between 0.0 and 100.0.");
+            MyPrint.print("Invalid score. Score must be between 0.0 and 100.0.");
         }
     }
 
     public static void viewAllStudents(GradebookManager manager) {
         if (manager.getStudents().isEmpty()) {
-            System.out.println();
-            System.out.println("No students in the gradebook yet.");
+            MyPrint.print();
+            MyPrint.print("No students in the gradebook yet.");
             return;
         }
 
-        System.out.println();
-        System.out.println("All Students:");
+        MyPrint.print();
+        MyPrint.print("All Students:");
 
         for (GradebookStudent student : manager.getStudents()) {
             double avg = Math.round(student.averageGrade() * 100.0) / 100.0; // rounds it to 2 decimals
 
             if (student.getGrades().isEmpty()) {
-                System.out.println(student.getID() + " - " + student.getName()
+                MyPrint.print(student.getID() + " - " + student.getName()
                         + " - Average: " + avg + " (no grades yet)");
             } else {
-                System.out.println(student.getID() + " - " + student.getName()
+                MyPrint.print(student.getID() + " - " + student.getName()
                         + " - Average: " + avg);
             }
         }
@@ -173,15 +174,15 @@ public class GradebookApp {
 
     public static void viewStudentDetails(GradebookManager manager, Scanner scanner) {
         if (manager.getStudents().isEmpty()) {
-            System.out.println();
-            System.out.println("No students in the gradebook yet. Add a student or load data from a file before viewing details.");
+            MyPrint.print();
+            MyPrint.print("No students in the gradebook yet. Add a student or load data from a file before viewing details.");
             return;
         }
 
         System.out.print("Enter student id: ");
         if (!scanner.hasNextInt()) {
-            System.out.println();
-            System.out.println("Invalid student id.");
+            MyPrint.print();
+            MyPrint.print("Invalid student id.");
             scanner.next();
             return;
         }
@@ -189,44 +190,44 @@ public class GradebookApp {
         scanner.nextLine();
 
         GradebookStudent student = manager.findById(id);
-        System.out.println();
+        MyPrint.print();
 
         if (student == null) {
-            System.out.println("No student found with id " + id + ".");
+            MyPrint.print("No student found with id " + id + ".");
             return;
         }
 
         // print out everything about this one student
-        System.out.println("Student Details:");
-        System.out.println("ID: " + student.getID());
-        System.out.println("Name: " + student.getName());
-        System.out.println();
-        System.out.println("Grades:");
+        MyPrint.print("Student Details:");
+        MyPrint.print("ID: " + student.getID());
+        MyPrint.print("Name: " + student.getName());
+        MyPrint.print();
+        MyPrint.print("Grades:");
 
         if (student.getGrades().isEmpty()) {
-            System.out.println("No grades yet.");
+            MyPrint.print("No grades yet.");
         } else {
             for (GradeItem grade : student.getGrades()) {
-                System.out.println(grade);
+                MyPrint.print(grade);
             }
         }
 
         double avg = Math.round(student.averageGrade() * 100.0) / 100.0;
-        System.out.println();
-        System.out.println("Average: " + avg);
+        MyPrint.print();
+        MyPrint.print("Average: " + avg);
     }
 
     public static void searchStudent(GradebookManager manager, Scanner scanner) {
         if (manager.getStudents().isEmpty()) {
-            System.out.println();
-            System.out.println("No students in the gradebook yet. Add or load data first.");
+            MyPrint.print();
+            MyPrint.print("No students in the gradebook yet. Add or load data first.");
             return;
         }
 
         System.out.print("Enter student id to search: ");
         if (!scanner.hasNextInt()) {
-            System.out.println();
-            System.out.println("Invalid student id.");
+            MyPrint.print();
+            MyPrint.print("Invalid student id.");
             scanner.next();
             return;
         }
@@ -234,15 +235,15 @@ public class GradebookApp {
         scanner.nextLine();
 
         GradebookStudent student = manager.findById(id);
-        System.out.println();
+        MyPrint.print();
 
         if (student == null) {
-            System.out.println("No student found with id " + id + ".");
+            MyPrint.print("No student found with id " + id + ".");
         } else {
             double avg = Math.round(student.averageGrade() * 100.0) / 100.0;
-            System.out.println("Found:");
-            System.out.println(student.getID() + " - " + student.getName());
-            System.out.println("Average: " + avg);
+            MyPrint.print("Found:");
+            MyPrint.print(student.getID() + " - " + student.getName());
+            MyPrint.print("Average: " + avg);
         }
     }
 
@@ -250,40 +251,40 @@ public class GradebookApp {
         System.out.print("Enter file path: ");
         String filename = scanner.nextLine();
 
-        System.out.println();
+        MyPrint.print();
 
         try {
             int studentsLoaded = manager.loadFromFile(filename);
-            System.out.println("Data loaded successfully.");
-            System.out.println("Students loaded: " + studentsLoaded);
+            MyPrint.print("Data loaded successfully.");
+            MyPrint.print("Students loaded: " + studentsLoaded);
         } catch (FileNotFoundException e) {
             // file path was probably wrong or doesnt exist
-            System.out.println("Could not find file: " + filename);
-            System.out.println("Gradebook was not changed.");
+            MyPrint.print("Could not find file: " + filename);
+            MyPrint.print("Gradebook was not changed.");
         }
     }
 
     public static void saveData(GradebookManager manager, Scanner scanner) {
         if (manager.getStudents().isEmpty()) {
-            System.out.println();
-            System.out.println("No gradebook data to save yet. Add a student or load data from a file before saving.");
+            MyPrint.print();
+            MyPrint.print("No gradebook data to save yet. Add a student or load data from a file before saving.");
             return;
         }
 
         System.out.print("Enter file path: ");
         String filename = scanner.nextLine();
 
-        System.out.println();
+        MyPrint.print();
 
         try {
 
             //saveToFile writes out the entire current roster every time, not just newly added elements
             //it means that save then load always gives back the exact same data
             manager.saveToFile(filename);
-            System.out.println("Gradebook saved successfully.");
+            MyPrint.print("Gradebook saved successfully.");
         } catch (IOException e) {
             //this could occur if the folder in the path doesnt exist
-            System.out.println("Could not save file: " + filename);
+            MyPrint.print("Could not save file: " + filename);
         }
     }
 }
